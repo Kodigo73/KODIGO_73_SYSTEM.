@@ -1,25 +1,21 @@
-// Importamos la librería directamente
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+create table items (
 
-const SB_URL = "https://cutpwedmojdhbaqyemcv.supabase.co"; 
-const SB_KEY = "TU_CLAVE_SB_PUB_AQUÍ"; // Pon la clave larga que empieza por sb_pub
+id bigint generated always as identity primary key,
 
-const supabaseClient = createClient(SB_URL, SB_KEY);
+title text,
+url text,
+category text,
+created_at timestamp with time zone default now()
 
-// Exportamos la función para que el HTML la vea
-window.inyectarVideo = async function() {
-    const titulo = document.getElementById('v-titulo').value;
-    const url = document.getElementById('v-url').value;
-    const cat = document.getElementById('v-cat').value;
-
-    const { data, error } = await supabaseClient
-        .from('VIDEOS')
-        .insert([{ TITULO: titulo, url_youtube: url, categoria: cat }]);
-
-    if (error) {
-        alert("ERROR EN EL SISTEMA: " + error.message);
-    } else {
-        alert("INYECTADO: Contenido publicado en K73.");
-        location.reload();
-    }
-}
+);
+alter table items enable row level security;
+create policy "public select"
+on items
+for select
+to anon
+using (true);
+create policy "public insert"
+on items
+for insert
+to anon
+with check (true);
