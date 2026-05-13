@@ -1,603 +1,88 @@
-
-<!DOCTYPE html>
 <html lang="es">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>EL RAP NO SE TOCA | K73</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
-
-<style>
-
-:root{
-    --verde:#00ff88;
-    --rojo:#ff1a1a;
-    --negro:#050505;
-    --gris:#111;
-    --texto:#d9d9d9;
-    --glass:rgba(0,0,0,.72);
-    --borde:rgba(255,255,255,.08);
-}
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    min-height:100vh;
-    overflow-x:hidden;
-    font-family:'Orbitron', sans-serif;
-    color:white;
-    background:
-    linear-gradient(rgba(0,0,0,.75), rgba(0,0,0,.88)),
-    url('lucid-origin_textura_valla_metalica_de_mma_roja_y_negra_para_un_fondo-1.jpg');
-    background-position:center;
-    background-size:cover;
-    background-attachment:fixed;
-    position:relative;
-}
-
-/* OVERLAY MMA */
-body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    background:
-    repeating-linear-gradient(
-        45deg,
-        rgba(255,255,255,.03) 0px,
-        rgba(255,255,255,.03) 2px,
-        transparent 2px,
-        transparent 12px
-    );
-    mix-blend-mode:overlay;
-    pointer-events:none;
-    opacity:.4;
-}
-
-/* SCANLINES */
-body::after{
-    content:"";
-    position:fixed;
-    inset:0;
-    background:linear-gradient(
-        transparent 50%,
-        rgba(0,255,120,.03) 50%
-    );
-    background-size:100% 4px;
-    pointer-events:none;
-}
-
-/* LINEA VERDE */
-.scanline{
-    position:fixed;
-    width:100%;
-    height:2px;
-    top:50%;
-    background:var(--verde);
-    box-shadow:0 0 20px var(--verde);
-    opacity:.35;
-    animation:scanner 4s linear infinite;
-    z-index:1;
-}
-
-@keyframes scanner{
-    0%{top:0%;}
-    100%{top:100%;}
-}
-
-/* HEADER */
-header{
-    position:relative;
-    z-index:5;
-    text-align:center;
-    padding:40px 20px 10px;
-}
-
-/* LOGO MÁS GRANDE */
-.logo-img{
-    width:260px;
-    max-width:85vw;
-    margin-bottom:20px;
-    filter:
-    drop-shadow(0 0 10px var(--rojo))
-    drop-shadow(0 0 30px rgba(255,0,0,.5));
-    transition:.4s;
-}
-
-.logo-img:hover{
-    transform:scale(1.05);
-}
-
-h1{
-    font-size:clamp(2.5rem,7vw,6rem);
-    color:var(--verde);
-    letter-spacing:10px;
-    text-shadow:
-    0 0 10px var(--verde),
-    0 0 30px rgba(0,255,100,.5);
-    margin-bottom:10px;
-}
-
-.system{
-    color:#aaa;
-    font-size:.8rem;
-    letter-spacing:3px;
-    margin-bottom:40px;
-}
-
-/* NAV */
-nav{
-    width:100%;
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:15px;
-    padding:0 20px 30px;
-    position:relative;
-    z-index:5;
-}
-
-nav button{
-    background:rgba(0,0,0,.65);
-    border:1px solid rgba(255,255,255,.1);
-    color:var(--verde);
-    padding:14px 22px;
-    cursor:pointer;
-    font-family:'Orbitron', sans-serif;
-    letter-spacing:2px;
-    transition:.3s;
-    position:relative;
-    overflow:hidden;
-}
-
-nav button:hover,
-nav button.active{
-    background:var(--rojo);
-    color:white;
-    transform:translateY(-2px);
-    box-shadow:0 0 20px rgba(255,0,0,.5);
-}
-
-/* PANEL */
-.main-panel{
-    width:92%;
-    max-width:720px;
-    margin:auto;
-    padding:40px;
-    background:var(--glass);
-    border:1px solid rgba(255,0,0,.3);
-    backdrop-filter:blur(10px);
-    box-shadow:
-    0 0 40px rgba(0,0,0,.9),
-    inset 0 0 30px rgba(255,0,0,.08);
-    position:relative;
-    z-index:5;
-}
-
-.main-panel::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    border:1px solid rgba(0,255,100,.1);
-    pointer-events:none;
-}
-
-.main-panel h2{
-    text-align:center;
-    color:var(--rojo);
-    margin-bottom:30px;
-    letter-spacing:5px;
-    font-size:1.3rem;
-}
-
-/* INPUTS */
-input,
-select{
-    width:100%;
-    margin-bottom:18px;
-    padding:18px;
-    background:#0b0b0b;
-    border:1px solid #222;
-    color:var(--verde);
-    font-family:'Orbitron', sans-serif;
-    outline:none;
-    transition:.3s;
-}
-
-input:focus,
-select:focus{
-    border-color:var(--verde);
-    box-shadow:0 0 15px rgba(0,255,100,.25);
-}
-
-/* BOTÓN */
-.btn-confirmar{
-    width:100%;
-    padding:20px;
-    background:linear-gradient(90deg,#6b0000,#ff0000);
-    border:none;
-    color:white;
-    font-weight:800;
-    letter-spacing:4px;
-    cursor:pointer;
-    transition:.3s;
-    font-family:'Orbitron', sans-serif;
-}
-
-.btn-confirmar:hover{
-    transform:translateY(-2px);
-    box-shadow:0 0 25px rgba(255,0,0,.6);
-}
-
-/* SECCIONES */
-.section{
-    display:none;
-    width:100%;
-    max-width:1600px;
-    margin:auto;
-    padding:50px 30px;
-    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
-    gap:30px;
-    position:relative;
-    z-index:5;
-}
-
-/* CARDS MMA */
-.card{
-    background:rgba(0,0,0,.82);
-    border:1px solid rgba(255,255,255,.08);
-    overflow:hidden;
-    position:relative;
-    transition:.4s;
-}
-
-.card::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    border-top:3px solid var(--rojo);
-    border-bottom:3px solid var(--verde);
-    pointer-events:none;
-}
-
-.card:hover{
-    transform:translateY(-8px) scale(1.01);
-    box-shadow:
-    0 0 25px rgba(255,0,0,.25),
-    0 0 45px rgba(0,255,100,.12);
-}
-
-/* VIDEO */
-.card iframe{
-    width:100%;
-    aspect-ratio:16/9;
-    border:none;
-}
-
-/* TÍTULO */
-.card h3{
-    padding:18px;
-    text-align:center;
-    color:var(--verde);
-    letter-spacing:2px;
-    font-size:.95rem;
-}
-
-/* RESPONSIVE */
-@media(max-width:768px){
-
-    h1{
-        letter-spacing:4px;
-    }
-
-    .main-panel{
-        padding:25px;
-    }
-
-    nav{
-        gap:10px;
-    }
-
-    nav button{
-        width:100%;
-    }
-
-    .section{
-        grid-template-columns:1fr;
-        padding:25px;
-    }
-
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="scanline"></div>
-
-<header>
-
-    <!-- LOGO MÁS GRANDE -->
-    <img 
-    src="kodigo-73_4_800x450 (1).png"
-    alt="K73"
-    class="logo-img"
-    onclick="location.reload()"
-    >
-
-    <h1>EL RAP NO SE TOCA</h1>
-
-    <div class="system">
-        [ K73 SYSTEM // MMA UNDERGROUND MODE ]
-    </div>
-
-</header>
-
-<nav>
-
-<button onclick="verSeccion('admin', this)" class="active">
-INICIO
-</button>
-
-<button onclick="verSeccion('octogono', this)">
+<button class="nav-btn active" data-section="octogono">
 OCTÁGONO
 </button>
 
-<button onclick="verSeccion('xtreme', this)">
+<button class="nav-btn" data-section="xtreme">
 X-TREME
 </button>
 
-<button onclick="verSeccion('street', this)">
+<button class="nav-btn" data-section="street">
 STREET
 </button>
 
-<button onclick="verSeccion('galeria', this)">
+<button class="nav-btn" data-section="galeria">
 GALERÍA
+</button>
+
+<button id="adminToggle">
+ADMIN
 </button>
 
 </nav>
 
-<!-- PANEL -->
-<div id="admin" class="main-panel" style="display:block;">
+<section class="top-bar">
 
-<h2>INYECTAR NUEVA DATA</h2>
+<input
+id="buscar"
+placeholder="BUSCAR CONTENIDO"
+>
+
+</section>
+
+<section id="adminPanel" class="admin-panel hidden">
+
+<h2>INYECCIÓN DE CONTENIDO</h2>
 
 <input
 type="text"
 id="titulo"
 placeholder="NOMBRE DEL VIDEO"
-/>
+>
 
 <input
 type="text"
 id="url"
 placeholder="https://youtube.com/..."
-/>
+>
 
 <select id="categoria">
-
 <option value="octogono">OCTÁGONO</option>
 <option value="xtreme">X-TREME</option>
 <option value="street">STREET</option>
 <option value="galeria">GALERÍA</option>
-
 </select>
 
-<button class="btn-confirmar" onclick="eyectar()">
+<button id="btnPublicar">
 CONFIRMAR INYECCIÓN
 </button>
 
+</section>
+
+<main>
+
+<section id="octogono" class="video-grid active-grid"></section>
+<section id="xtreme" class="video-grid"></section>
+<section id="street" class="video-grid"></section>
+<section id="galeria" class="video-grid"></section>
+
+</main>
+
+<div id="modal" class="modal hidden">
+
+<div class="modal-content">
+
+<button id="cerrarModal">X</button>
+
+<div id="modalVideo"></div>
+
 </div>
 
-<!-- SECCIONES -->
-<div id="octogono" class="section"></div>
-<div id="xtreme" class="section"></div>
-<div id="street" class="section"></div>
-<div id="galeria" class="section"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-
-<script>
-
-/* SUPABASE */
-
-const _url =
-'https://curious-gingersnap-fcbe02.supabase.co';
-
-const _key =
-'sb_publishable_Gsm9HFUlJnywkBeoWKjSqA_A_Wdkn5m';
-
-const _supabase =
-supabase.createClient(_url, _key);
-
-/* EXTRAER VIDEO */
-
-function obtenerYoutubeID(url){
-
-    try{
-
-        const regExp =
-        /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/;
-
-        const match = url.match(regExp);
-
-        return match ? match[1] : null;
-
-    }catch{
-        return null;
-    }
-
-}
-
-/* ALERTA ESTILO SISTEMA */
-
-function mensaje(txt,color="#00ff88"){
-
-    const div = document.createElement("div");
-
-    div.innerHTML = txt;
-
-    div.style.cssText = `
-    position:fixed;
-    top:30px;
-    right:30px;
-    background:#000;
-    color:${color};
-    border:1px solid ${color};
-    padding:20px;
-    z-index:9999;
-    font-family:Orbitron;
-    box-shadow:0 0 20px ${color};
-    `;
-
-    document.body.appendChild(div);
-
-    setTimeout(()=>{
-        div.remove();
-    },3000);
-
-}
-
-/* GUARDAR */
-
-async function eyectar(){
-
-    const title =
-    document.getElementById('titulo').value.trim();
-
-    const url =
-    document.getElementById('url').value.trim();
-
-    const category =
-    document.getElementById('categoria').value;
-
-    if(!title || !url){
-
-        mensaje("ERROR: CAMPOS VACÍOS","#ff0000");
-        return;
-
-    }
-
-    const vidId = obtenerYoutubeID(url);
-
-    if(!vidId){
-
-        mensaje("URL YOUTUBE NO VÁLIDA","#ff0000");
-        return;
-
-    }
-
-    const { error } = await _supabase
-    .from('items')
-    .insert([{
-        title,
-        url,
-        category
-    }]);
-
-    if(error){
-
-        console.error(error);
-
-        mensaje("ERROR DE INYECCIÓN","#ff0000");
-
-    }else{
-
-        mensaje("INYECCIÓN COMPLETADA");
-
-        setTimeout(()=>{
-            location.reload();
-        },1200);
-
-    }
-
-}
-
-/* CARGAR */
-
-async function cargar(){
-
-    const { data, error } =
-    await _supabase
-    .from('items')
-    .select('*')
-    .order('created_at', {
-        ascending:false
-    });
-
-    if(error){
-        console.error(error);
-        return;
-    }
-
-    data.forEach(item=>{
-
-        const container =
-        document.getElementById(item.category);
-
-        if(!container) return;
-
-        const vidId =
-        obtenerYoutubeID(item.url);
-
-        if(!vidId) return;
-
-        const card =
-        document.createElement('div');
-
-        card.className = 'card';
-
-        card.innerHTML = `
-
-        <iframe
-        src="https://www.youtube.com/embed/${vidId}"
-        allowfullscreen>
-        </iframe>
-
-        <h3>${item.title}</h3>
-
-        `;
-
-        container.appendChild(card);
-
-    });
-
-}
-
-cargar();
-
-/* NAVEGACIÓN */
-
-function verSeccion(id, btn){
-
-    document
-    .querySelectorAll('.section, .main-panel')
-    .forEach(s => s.style.display = 'none');
-
-    document
-    .querySelectorAll('nav button')
-    .forEach(b => b.classList.remove('active'));
-
-    const target =
-    document.getElementById(id);
-
-    if(id === 'admin'){
-        target.style.display = 'block';
-    }else{
-        target.style.display = 'grid';
-    }
-
-    btn.classList.add('active');
-
-}
-
-</script>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
 
 </body>
 </html>
