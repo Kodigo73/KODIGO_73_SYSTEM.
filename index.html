@@ -178,38 +178,55 @@
 <audio id="snd-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-<script src="app.js"></script>
-
 <script>
-    const snd = document.getElementById('snd-click');
-    const frame = document.getElementById('main-frame');
+    // --- CONEXIÓN DIRECTA ---
+    const supabaseUrl = 'https://curious-gingersnap-fcbe02.supabase.co'; 
+    const supabaseKey = 'sb_publishable_Gsm9HFUlJnywkBeoWKjSqA_A_Wdkn5m';
+    const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
+    // --- CARGA DE VIDEOS ---
+    async function loadLibrary() {
+        const { data, error } = await _supabase.from('items').select('*').order('created_at', { ascending: false });
+        if (error) return;
+        document.querySelectorAll('.section').forEach(s => s.innerHTML = '');
+        data.forEach(item => {
+            const container = document.getElementById(item.category);
+            if (container) {
+                const card = document.createElement('div');
+                card.className = 'card';
+                let vidId = item.url.includes('v=') ? item.url.split('v=')[1].split('&')[0] : item.url.split('/').pop();
+                card.innerHTML = `<iframe src="https://www.youtube.com/embed/${vidId}" allowfullscreen></iframe><h3>${item.title}</h3>`;
+                container.appendChild(card);
+            }
+        });
+    }
+    loadLibrary();
+
+    // --- NAVEGACIÓN ---
     function controlNav(id, btn) {
-        if(snd) { snd.currentTime = 0; snd.play().catch(()=>{}); }
-        frame.classList.remove('shake');
-        void frame.offsetWidth;
-        frame.classList.add('shake');
-
         document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
         document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-
         const target = document.getElementById(id);
         if(target) target.style.display = 'grid';
         btn.classList.add('active');
     }
 
+    // --- MODO ADMIN ---
     let secretClicks = 0;
     document.getElementById('secret-trigger').addEventListener('click', () => {
         secretClicks++;
         if (secretClicks === 3) {
             const pass = prompt("ACCESO RESTRINGIDO. PASSWORD:");
-            if (pass === 'K73_SYSTEM') {
-                document.getElementById('admin-panel').style.display = 'block';
-                window.scrollTo(0, document.body.scrollHeight);
-            }
+            if (pass === 'K73_SYSTEM') document.getElementById('admin-panel').style.display = 'block';
             secretClicks = 0;
         }
     });
+
+    async function injectData() {
+        const title = document.getElementById('content-title').value;
+        const url = document.getElementById('content-url').value;
+        const category = document.getElementById('content-category').value;
+        await _supabase.from('items').insert([{ title, url, category }]);
+        location.reload();
+    }
 </script>
-</body>
-</html>
