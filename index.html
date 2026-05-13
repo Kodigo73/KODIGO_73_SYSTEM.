@@ -157,20 +157,48 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 <script src="app.js"></script>
 <script>
+ <script>
     const snd = document.getElementById('snd-click');
     const mainFrame = document.getElementById('main-frame');
 
     function controlNav(secId, btn) {
-        snd.currentTime = 0;
-        snd.play().catch(()=>{}); 
+        // 1. Sonido y Temblor
+        if(snd) {
+            snd.currentTime = 0;
+            snd.play().catch(()=>{}); 
+        }
+        
         mainFrame.classList.remove('shake');
-        void mainFrame.offsetWidth;
+        void mainFrame.offsetWidth; // Truco para reiniciar animación
         mainFrame.classList.add('shake');
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+
+        // 2. Ocultar TODAS las secciones primero
+        const todasLasSecciones = document.querySelectorAll('.section');
+        todasLasSecciones.forEach(s => {
+            s.style.display = 'none'; // Forzamos el cierre
+            s.classList.remove('active');
+        });
+
+        // 3. Quitar luz a todos los botones
         document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-        document.getElementById(secId).classList.add('active');
+        
+        // 4. Mostrar SOLO la que hemos clicado
+        const seccionActiva = document.getElementById(secId);
+        if (seccionActiva) {
+            seccionActiva.style.display = 'grid'; // Forzamos la apertura en modo rejilla
+            seccionActiva.classList.add('active');
+        }
+
+        // 5. Encender el botón clicado
         btn.classList.add('active');
     }
+
+    // Al cargar la página, nos aseguramos de que la primera esté abierta
+    window.onload = () => {
+        const btnOctogono = document.querySelector('nav button');
+        if(btnOctogono) controlNav('octogono', btnOctogono);
+    };
+</script>
 </script>
 </body>
 </html>
