@@ -3,127 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KODIGO_73 | SYSTEM V2</title>
+    <title>EL RAP NO SE TOCA | KODIGO 73</title>
     <style>
         :root {
-            --negro: #0a0a0a;
-            --rojo: #8b0000;
+            --negro: #050505;
+            --rojo: #ff0000;
             --verde: #00ff41;
-            --gris: #222;
+            --verde-glow: rgba(0, 255, 65, 0.5);
+            --fuente: 'Courier New', Courier, monospace;
         }
 
         body {
             background: var(--negro) url('lucid-origin_textura_valla_metalica_de_mma_roja_y_negra_para_un_fondo-1.jpg') fixed center/cover;
             color: white;
-            font-family: 'Courier New', monospace;
+            font-family: var(--fuente);
             margin: 0;
-            padding: 20px;
+            overflow-x: hidden;
         }
 
+        /* ESCANEADO DE PANTALLA (Línea horizontal neón) */
+        body::before {
+            content: " ";
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .scanline {
+            width: 100%;
+            height: 2px;
+            background: var(--verde);
+            position: fixed;
+            opacity: 0.3;
+            box-shadow: 0 0 10px var(--verde);
+            animation: scan 4s linear infinite;
+            z-index: 10;
+        }
+
+        @keyframes scan {
+            0% { top: -5%; }
+            100% { top: 105%; }
+        }
+
+        /* CONTENEDOR PRINCIPAL XL */
         .container {
-            max-width: 1000px;
-            margin: auto;
-            background: rgba(0, 0, 0, 0.9);
-            border: 2px solid var(--rojo);
-            padding: 20px;
-            box-shadow: 0 0 25px var(--rojo);
+            width: 95%;
+            max-width: 1500px;
+            margin: 20px auto;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid var(--verde);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 1), inset 0 0 15px var(--verde-glow);
+            padding: 30px;
+            position: relative;
+            z-index: 5;
+            transition: transform 0.1s; /* Para el temblor */
         }
 
-        header { text-align: center; border-bottom: 2px solid var(--verde); padding-bottom: 15px; }
-
-        nav { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
-        nav button { 
-            background: #000; color: var(--verde); border: 1px solid var(--verde);
-            padding: 10px 15px; cursor: pointer; font-weight: bold;
-        }
-        nav button:hover, nav button.active { background: var(--verde); color: #000; }
-
-        .section { display: none; animation: fadeIn 0.5s; }
-        .section.active { display: block; }
-
-        #admin-panel { background: #111; border: 1px dashed var(--rojo); padding: 15px; }
-        
-        input, select, button.action-btn {
-            background: #000; border: 1px solid var(--verde); color: var(--verde);
-            padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box;
+        /* EFECTO TEMBLOR */
+        .shake {
+            animation: shake 0.2s ease-in-out;
         }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
-        .card { border: 1px solid var(--gris); background: #050505; padding: 10px; text-align: center; }
-        iframe, img { width: 100%; border: none; border-radius: 4px; }
-        img { height: auto; border: 1px solid var(--verde); }
+        @keyframes shake {
+            0% { transform: translate(0,0); }
+            25% { transform: translate(5px, 5px); }
+            50% { transform: translate(-5px, -5px); }
+            75% { transform: translate(5px, -5px); }
+            100% { transform: translate(0,0); }
+        }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        header {
+            text-align: center;
+            border-bottom: 2px solid var(--verde);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .logo-img {
+            width: 120px;
+            filter: drop-shadow(0 0 10px var(--rojo));
+            cursor: pointer;
+        }
+
+        /* TÍTULO NEON GLITCH */
+        h1 {
+            color: var(--verde);
+            font-size: 3rem;
+            text-shadow: 2px 2px var(--rojo), -2px -2px #000;
+            letter-spacing: 10px;
+            margin: 10px 0;
+            text-transform: uppercase;
+        }
+
+        .status-bar {
+            background: var(--verde);
+            color: black;
+            font-weight: bold;
+            padding: 5px;
+            font-size: 0.7rem;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            background: black;
+            color: var(--verde);
+            border: 1px solid var(--verde);
+            padding: 15px 30px;
+            cursor: pointer;
+            font-family: var(--fuente);
+            font-size: 1rem;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        nav button:hover, nav button.active {
+            background: var(--verde);
+            color: black;
+            box-shadow: 0 0 20px var(--verde);
+        }
+
+        /* GRID DE VIDEOS PROFESIONAL */
+        .section {
+            display: none;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .section.active { display: grid; }
+
+        .card {
+            background: rgba(20, 20, 20, 0.9);
+            border-left: 5px solid var(--rojo);
+            padding: 15px;
+            transition: 0.3s;
+        }
+
+        .card:hover { transform: scale(1.02); border-left-color: var(--verde); }
+
+        .card iframe { width: 100%; aspect-ratio: 16/9; border: none; }
+
+        /* PANEL ADMIN */
+        #admin-panel {
+            display: none;
+            margin-top: 40px;
+            border-top: 2px dashed var(--rojo);
+            padding-top: 20px;
+        }
+
+        input, select {
+            background: #000;
+            border: 1px solid var(--verde);
+            color: var(--verde);
+            padding: 15px;
+            width: 100%;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .btn-add {
+            background: var(--rojo);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="scanline"></div>
+
+<div class="container" id="main-frame">
     <header>
-        <img src="kodigo-73_4_800x450 (1).png" alt="K73" id="logo-secreto" style="width: 180px; cursor: crosshair; user-select: none;">
-        <h1 style="color: var(--verde); font-size: 1.5em;">SYSTEM_DISTRIBUTION_CENTER</h1>
+        <div class="status-bar">SISTEMA K73 ACTIVO // ENCRIPTACIÓN NIVEL 5</div>
+        <br>
+        <img src="kodigo-73_4_800x450 (1).png" alt="K73" class="logo-img" id="secret-trigger">
+        <h1>EL RAP NO SE TOCA</h1>
+        <p style="color: var(--verde)">CENTRAL DE DISTRIBUCIÓN MULTIMEDIA</p>
     </header>
 
-    <nav id="menu-principal">
-        <button onclick="showTab('tab-octagono')" class="active">OCTÁGONO</button>
-        <button onclick="showTab('tab-xtreme')">X-TREME</button>
-        <button onclick="showTab('tab-street')">STREET</button>
-        <button onclick="showTab('tab-fotos')">GALERÍA</button>
-        <button id="btn-admin-fantasma" onclick="showTab('tab-admin')" style="display:none; border-color: var(--rojo); color: var(--rojo);">[ ADMIN_ON ]</button>
+    <nav id="navbar">
+        <button onclick="changeTab('octogono')" class="active">OCTÁGONO</button>
+        <button onclick="changeTab('xtreme')">X-TREME</button>
+        <button onclick="changeTab('street')">STREET</button>
+        <button onclick="changeTab('galeria')">GALERÍA</button>
     </nav>
 
-    <div id="tab-admin" class="section">
-        <div id="admin-panel">
-            <h3 style="color: var(--rojo);">[ INYECTOR_MULTIMEDIA ]</h3>
-            <select id="tipo-carga">
-                <option value="video">VÍDEO (YouTube)</option>
-                <option value="imagen">IMAGEN (URL Directa)</option>
-            </select>
-            <input type="text" id="v-titulo" placeholder="TÍTULO...">
-            <input type="text" id="v-url" placeholder="URL (Link YouTube o Imagen)...">
-            <select id="v-cat">
-                <option value="OCTÁGONO">OCTÁGONO</option>
-                <option value="X-TREME">X-TREME</option>
-                <option value="STREET">STREET</option>
-                <option value="GALERIA">GALERÍA FOTOS</option>
-            </select>
-            <button id="btn-inyectar" class="action-btn">EJECUTAR INYECCIÓN</button>
-        </div>
-    </div>
+    <div id="octogono" class="section active"></div>
+    <div id="xtreme" class="section"></div>
+    <div id="street" class="section"></div>
+    <div id="galeria" class="section"></div>
 
-    <div id="tab-octagono" class="section active">
-        <h2 style="color: var(--verde);">// SECTOR_OCTÁGONO</h2>
-        <div id="grid-octagono" class="grid"></div>
-    </div>
-
-    <div id="tab-xtreme" class="section">
-        <h2 style="color: var(--verde);">// SECTOR_X-TREME</h2>
-        <div id="grid-xtreme" class="grid"></div>
-    </div>
-
-    <div id="tab-street" class="section">
-        <h2 style="color: var(--verde);">// SECTOR_STREET</h2>
-        <div id="grid-street" class="grid"></div>
-    </div>
-
-    <div id="tab-fotos" class="section">
-        <h2 style="color: var(--verde);">// ARCHIVO_VISUAL</h2>
-        <div id="grid-fotos" class="grid"></div>
+    <div id="admin-panel">
+        <h2 style="color: var(--rojo)">[ ACCESO TRONCAL ]</h2>
+        <input type="text" id="content-title" placeholder="NOMBRE DEL ARCHIVO">
+        <input type="text" id="content-url" placeholder="URL (YOUTUBE O IMAGEN)">
+        <select id="content-category">
+            <option value="octogono">OCTÁGONO</option>
+            <option value="xtreme">X-TREME</option>
+            <option value="street">STREET</option>
+            <option value="galeria">GALERÍA</option>
+        </select>
+        <button class="btn-add" id="save-btn">INYECTAR DATA</button>
     </div>
 </div>
 
+<audio id="snd-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="app.js"></script>
+
 <script>
-    function showTab(tabId) {
+    const sndClick = document.getElementById('snd-click');
+    const frame = document.getElementById('main-frame');
+
+    function changeTab(sectionId) {
+        // Sonido
+        sndClick.currentTime = 0;
+        sndClick.play();
+
+        // Temblor
+        frame.classList.remove('shake');
+        void frame.offsetWidth; // Reset animation
+        frame.classList.add('shake');
+
+        // Cambiar sección
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
         document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-        // Buscamos el botón que tiene el onclick del tabId para ponerlo active
-        const buttons = document.querySelectorAll('nav button');
-        buttons.forEach(btn => {
-            if(btn.getAttribute('onclick')?.includes(tabId)) btn.classList.add('active');
-        });
+        
+        document.getElementById(sectionId).classList.add('active');
+        event.currentTarget.classList.add('active');
     }
+
+    // El resto de la lógica de Supabase se mantiene en app.js
 </script>
-<script type="module" src="app.js"></script>
 </body>
 </html>
