@@ -1,87 +1,82 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+const grids = document.querySelectorAll('.video-grid');
+const navBtns = document.querySelectorAll('.nav-btn');
+const adminPanel = document.getElementById('adminPanel');
+const adminToggle = document.getElementById('adminToggle');
+const btnPublicar = document.getElementById('btnPublicar');
+const buscar = document.getElementById('buscar');
 
-const SB_URL = "https://cutpwedmojdhbaqyemcv.supabase.co"; 
-const SB_KEY = "sb_publishable_Gsm9HFUlJnywkBeoWKjSqA_A_Wdkn5m"; 
-const supabase = createClient(SB_URL, SB_KEY);
+const modal = document.getElementById('modal');
+const modalVideo = document.getElementById('modalVideo');
+const cerrarModal = document.getElementById('cerrarModal');
 
-// --- PROTOCOLO MODO FANTASMA ---
-let clics = 0;
-const PASSWORD_MAESTRA = "K73_SYSTEM"; 
+/* LOGIN SIMPLE */
 
-document.getElementById('logo-secreto').addEventListener('click', () => {
-    clics++;
-    if (clics === 1) setTimeout(() => { clics = 0; }, 2000);
-    if (clics === 3) {
-        const password = prompt("SISTEMA BLOQUEADO. INTRODUCE CLAVE:");
-        if (password === PASSWORD_MAESTRA) {
-            alert("ACCESO CONCEDIDO.");
-            document.getElementById('btn-admin-fantasma').style.display = "inline-block";
-        } else {
-            alert("ACCESO DENEGADO.");
-        }
-        clics = 0;
-    }
+adminToggle.addEventListener('click',()=>{
+
+const pass = prompt('K73 ACCESS KEY');
+
+if(pass === 'k73admin'){
+
+adminPanel.classList.remove('hidden');
+mostrarToast('ACCESS GRANTED');
+
+}else{
+
+mostrarToast('ACCESS DENIED','#ff0000');
+
+}
+
 });
 
-// --- CARGA DE DATOS ---
-async function sincronizarSistema() {
-    const { data: videos } = await supabase.from('VIDEOS').select('*').order('created_at', { ascending: false });
-    const { data: imagenes } = await supabase.from('IMAGENES').select('*').order('created_at', { ascending: false });
+/* NAVEGACIÓN */
 
-    if(videos) distribuirVideos(videos);
-    if(imagenes) distribuirImagenes(imagenes);
-}
+navBtns.forEach(btn=>{
 
-function distribuirVideos(videos) {
-    const grids = { "OCTÁGONO": "grid-octagono", "X-TREME": "grid-xtreme", "STREET": "grid-street" };
-    Object.values(grids).forEach(id => document.getElementById(id).innerHTML = '');
+btn.addEventListener('click',()=>{
 
-    videos.forEach(v => {
-        const targetId = grids[v.categoria];
-        if (targetId) {
-            const embedUrl = v.url_youtube.replace('watch?v=', 'embed/').split('&')[0];
-            document.getElementById(targetId).innerHTML += `
-                <div class="card">
-                    <h4 style="color:#00ff41">${v.TITULO}</h4>
-                    <iframe src="${embedUrl}" allowfullscreen></iframe>
-                </div>`;
-        }
-    });
-}
+navBtns.forEach(b=>b.classList.remove('active'));
+btn.classList.add('active');
 
-function distribuirImagenes(imagenes) {
-    const gridFotos = document.getElementById('grid-fotos');
-    gridFotos.innerHTML = '';
-    imagenes.forEach(img => {
-        gridFotos.innerHTML += `
-            <div class="card">
-                <img src="${img.url_imagen}" alt="${img.TITULO}">
-                <p style="color:var(--verde)">${img.TITULO}</p>
-            </div>`;
-    });
-}
+const id = btn.dataset.section;
 
-// --- INYECCIÓN ---
-document.getElementById('btn-inyectar').addEventListener('click', async () => {
-    const tipo = document.getElementById('tipo-carga').value;
-    const titulo = document.getElementById('v-titulo').value;
-    const url = document.getElementById('v-url').value;
-    const cat = document.getElementById('v-cat').value;
+mostrarSeccion(id);
 
-    if(!titulo || !url) return alert("CAMPOS VACÍOS");
-
-    let error;
-    if (tipo === "video") {
-        ({ error } = await supabase.from('VIDEOS').insert([{ TITULO: titulo, url_youtube: url, categoria: cat }]));
-    } else {
-        ({ error } = await supabase.from('IMAGENES').insert([{ TITULO: titulo, url_imagen: url, seccion: cat }]));
-    }
-
-    if (error) alert("ERROR: " + error.message);
-    else {
-        alert("INYECCIÓN COMPLETADA");
-        location.reload();
-    }
 });
 
-sincronizarSistema();
+});
+
+function mostrarSeccion(id){
+
+grids.forEach(g=>g.classList.remove('active-grid'));
+
+const section = document.getElementById(id);
+
+section.classList.add('active-grid');
+
+}
+
+/* YOUTUBE ID */
+
+function obtenerYoutubeID(url){
+
+const regExp =
+/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([^?&\/]+)/;
+
+const match = url.match(regExp);
+
+return match ? match[1] : null;
+
+}
+
+/* TOAST */
+
+function mostrarToast(texto,color='#00ff88'){
+
+const toast = document.createElement('div');
+
+toast.className = 'toast';
+
+toast.textContent = texto;
+
+toast.style.color = color;
+cargarVideos();
