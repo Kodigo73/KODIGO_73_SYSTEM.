@@ -3,230 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EL RAP NO SE TOCA | KODIGO 73</title>
+    <title>EL RAP NO SE TOCA | K73</title>
     <style>
-        :root {
-            --verde: #00ff41;
-            --rojo: #ff0000;
-            --fuente: 'Courier New', Courier, monospace;
-        }
-
+        :root { --verde: #00ff41; --rojo: #ff0000; --fuente: 'Courier New', monospace; }
         * { box-sizing: border-box; }
-
         body {
             background: #000 url('lucid-origin_textura_valla_metalica_de_mma_roja_y_negra_para_un_fondo-1.jpg') fixed center/cover;
-            color: white;
-            font-family: var(--fuente);
-            margin: 0; padding: 0;
-            overflow-x: hidden;
+            color: white; font-family: var(--fuente); margin: 0; overflow-x: hidden;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
         }
 
-        /* LÍNEA LÁSER DINÁMICA */
-        .scanline {
-            width: 100%; height: 2px;
-            background: var(--verde);
-            position: fixed;
-            opacity: 0.5;
-            box-shadow: 0 0 15px var(--verde);
-            animation: scan 4s linear infinite;
-            z-index: 9999;
-            pointer-events: none;
-        }
-        @keyframes scan { 0% { top: -5%; } 100% { top: 105%; } }
+        /* LÍNEA VERDE ESCÁNER */
+        .scanline { width: 100%; height: 2px; background: var(--verde); position: fixed; top: 50%; opacity: 0.5; box-shadow: 0 0 15px var(--verde); z-index: 5; pointer-events: none; }
 
-        /* CONTENEDOR TOTALMENTE TRANSPARENTE */
-        .container {
-            width: 100%;
-            min-height: 100vh;
-            background: rgba(0, 0, 0, 0.4); /* Casi invisible para que luzca la valla */
-            backdrop-filter: blur(2px);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        header { text-align: center; margin-top: 40px; z-index: 10; }
+        .logo-img { width: 120px; filter: drop-shadow(0 0 10px var(--rojo)); cursor: pointer; }
+        h1 { color: var(--verde); font-size: clamp(2rem, 8vw, 4rem); text-shadow: 0 0 20px var(--verde); letter-spacing: 10px; margin: 20px 0; }
 
-        header { width: 100%; text-align: center; margin-bottom: 20px; }
-
-        /* LOGO GIGANTE E IMPONENTE */
-        .logo-img {
-            width: 500px;
-            max-width: 90%;
-            filter: drop-shadow(0 0 15px var(--rojo));
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        .logo-img:active { transform: scale(0.95); }
-
-        h1 {
-            color: var(--verde);
-            font-size: clamp(2.5rem, 10vw, 6rem);
-            text-shadow: 5px 5px 0px #000, 0 0 20px var(--verde);
-            letter-spacing: 15px;
-            margin: 10px 0;
-            text-transform: uppercase;
-        }
-
-        /* NAVEGACIÓN ESTILO TERMINAL */
-        nav { 
-            display: flex; 
-            justify-content: center; 
-            gap: 10px; 
-            flex-wrap: wrap; 
-            width: 100%;
-            margin-bottom: 40px;
-        }
-
+        /* NAVEGACIÓN SUBRAYADA */
+        nav { display: flex; gap: 30px; margin-bottom: 30px; z-index: 10; }
         nav button {
-            background: transparent;
-            color: var(--verde);
-            border: none;
-            border-bottom: 2px solid transparent;
-            padding: 15px 25px;
-            cursor: pointer;
-            font-family: var(--fuente);
-            font-size: 1.5rem;
-            font-weight: bold;
-            transition: 0.3s;
+            background: transparent; color: var(--verde); border: none; cursor: pointer;
+            font-family: var(--fuente); font-size: 1.2rem; font-weight: bold; padding: 5px;
+            transition: 0.3s; border-bottom: 2px solid transparent;
         }
+        nav button:hover, nav button.active { border-bottom: 2px solid var(--verde); text-shadow: 0 0 10px var(--verde); }
 
-        nav button:hover, nav button.active {
-            color: white;
-            border-bottom: 3px solid var(--verde);
-            text-shadow: 0 0 10px var(--verde);
-        }
-
-        /* GRID DE CONTENIDO SIN MARCOS */
-        .section {
-            display: none;
-            width: 100%;
-            max-width: 1600px;
-            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
-            gap: 40px;
-            padding: 20px;
-        }
-
-        .card {
-            background: rgba(0,0,0,0.7);
-            padding: 10px;
-            border-left: 4px solid var(--rojo);
-            transition: 0.3s;
-        }
-        .card:hover { background: rgba(0,0,0,0.9); transform: scale(1.02); }
-        .card iframe { width: 100%; aspect-ratio: 16/9; border: none; }
-        .card h3 { color: var(--verde); text-align: center; font-size: 1.1rem; margin-top: 15px; }
-
-        /* EFECTO VIBRACIÓN */
-        .shake { animation: shake 0.2s ease-in-out; }
-        @keyframes shake { 0% {transform: translate(0);} 25% {transform: translate(-5px, 5px);} 75% {transform: translate(5px, -5px);} }
-
-        /* PANEL ADMIN */
-        #admin-panel {
-            display: none;
-            width: 100%;
-            max-width: 800px;
-            background: #000;
+        /* EL PANEL CENTRAL (INYECTAR) */
+        .main-panel {
+            background: rgba(0, 0, 0, 0.9);
             border: 2px solid var(--rojo);
-            padding: 30px;
-            margin-top: 50px;
+            width: 90%; max-width: 600px;
+            padding: 30px; z-index: 10;
+            box-shadow: 0 0 30px rgba(0,0,0,1);
         }
-        input, select, .btn-inyeccion {
-            width: 100%; padding: 15px; margin: 10px 0;
-            background: #111; border: 1px solid var(--verde); color: var(--verde);
-            font-family: var(--fuente); font-size: 1.2rem;
+
+        .main-panel h2 { color: var(--rojo); text-align: center; font-size: 1.2rem; letter-spacing: 3px; margin-top: 0; margin-bottom: 25px; }
+
+        input, select {
+            width: 100%; padding: 15px; margin-bottom: 15px;
+            background: rgba(20, 20, 20, 0.8); border: 1px solid #333;
+            color: var(--verde); font-family: var(--fuente); font-size: 1rem;
         }
-        .btn-inyeccion { background: var(--rojo); color: white; border: none; cursor: pointer; font-weight: bold; }
+
+        .btn-confirmar {
+            width: 100%; padding: 20px; background: var(--rojo);
+            color: white; border: none; cursor: pointer;
+            font-weight: bold; font-size: 1.1rem; letter-spacing: 2px;
+            transition: 0.3s;
+        }
+        .btn-confirmar:hover { background: #b30000; box-shadow: 0 0 20px var(--rojo); }
+
+        /* CONTENEDOR DE VIDEOS */
+        .section { display: none; width: 100%; max-width: 1400px; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 25px; padding: 40px; z-index: 10; }
+        .card { background: rgba(0,0,0,0.9); border: 1px solid #222; padding: 15px; border-bottom: 3px solid var(--rojo); }
+        .card iframe { width: 100%; aspect-ratio: 16/9; border: none; }
+        .card h3 { color: var(--verde); text-align: center; font-size: 0.9rem; margin-top: 10px; }
     </style>
 </head>
 <body>
 
 <div class="scanline"></div>
 
-<div class="container" id="main-frame">
-    <header>
-        <img src="kodigo-73_4_800x450 (1).png" alt="K73" class="logo-img" id="secret-trigger">
-        <h1>EL RAP NO SE TOCA</h1>
-        <p style="color: var(--verde); font-weight: bold;">[ SYSTEMA K73 // MODO DISPONIBLE ]</p>
-    </header>
+<header>
+    <img src="kodigo-73_4_800x450 (1).png" alt="K73" class="logo-img" onclick="location.reload()">
+    <h1>EL RAP NO SE TOCA</h1>
+    <p style="color:var(--verde); font-size: 0.8rem; margin-bottom: 30px;">[ SYSTEMA K73 // MODO DISPONIBLE ]</p>
+</header>
 
-    <nav>
-        <button onclick="controlNav('octogono', this)" class="active">OCTÁGONO</button>
-        <button onclick="controlNav('xtreme', this)">X-TREME</button>
-        <button onclick="controlNav('street', this)">STREET</button>
-        <button onclick="controlNav('galeria', this)">GALERÍA</button>
-    </nav>
+<nav id="menu-principal">
+    <button onclick="verSeccion('admin', this)" class="active">INICIO</button>
+    <button onclick="verSeccion('octogono', this)">OCTÁGONO</button>
+    <button onclick="verSeccion('xtreme', this)">X-TREME</button>
+    <button onclick="verSeccion('street', this)">STREET</button>
+    <button onclick="verSeccion('galeria', this)">GALERÍA</button>
+</nav>
 
-    <div id="octogono" class="section" style="display: grid;"></div>
-    <div id="xtreme" class="section"></div>
-    <div id="street" class="section"></div>
-    <div id="galeria" class="section"></div>
-
-    <div id="admin-panel">
-        <h2 style="color: var(--rojo); text-align: center;">INYECTAR NUEVA DATA</h2>
-        <input type="text" id="content-title" placeholder="NOMBRE DEL ARCHIVO">
-        <input type="text" id="content-url" placeholder="URL (YOUTUBE / IMG)">
-        <select id="content-category">
-            <option value="octogono">OCTÁGONO</option>
-            <option value="xtreme">X-TREME</option>
-            <option value="street">STREET</option>
-            <option value="galeria">GALERÍA</option>
-        </select>
-        <button class="btn-inyeccion" id="save-btn">CONFIRMAR INYECCIÓN</button>
-    </div>
+<div id="admin" class="main-panel" style="display: block;">
+    <h2>INYECTAR NUEVA DATA</h2>
+    <input type="text" id="titulo" placeholder="BRUTOS SUCIOS">
+    <input type="text" id="url" placeholder="https://www.youtube.com/watch?v=...">
+    <select id="categoria">
+        <option value="octogono">OCTÁGONO</option>
+        <option value="xtreme">X-TREME</option>
+        <option value="street">STREET</option>
+        <option value="galeria">GALERÍA</option>
+    </select>
+    <button class="btn-confirmar" onclick="eyectar()">CONFIRMAR INYECCIÓN</button>
 </div>
 
-<audio id="snd-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+<div id="octogono" class="section"></div>
+<div id="xtreme" class="section"></div>
+<div id="street" class="section"></div>
+<div id="galeria" class="section"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 <script>
-    // --- CONEXIÓN DIRECTA ---
-    const supabaseUrl = 'https://curious-gingersnap-fcbe02.supabase.co'; 
-    const supabaseKey = 'sb_publishable_Gsm9HFUlJnywkBeoWKjSqA_A_Wdkn5m';
-    const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    // --- CONEXIÓN ---
+    const _url = 'https://curious-gingersnap-fcbe02.supabase.co';
+    const _key = 'sb_publishable_Gsm9HFUlJnywkBeoWKjSqA_A_Wdkn5m';
+    const _supabase = supabase.createClient(_url, _key);
 
-    // --- CARGA DE VIDEOS ---
-    async function loadLibrary() {
+    // --- FUNCION EYECTAR (GUARDAR) ---
+    async function eyectar() {
+        const title = document.getElementById('titulo').value;
+        const url = document.getElementById('url').value;
+        const category = document.getElementById('categoria').value;
+
+        if (!title || !url) {
+            alert("SISTEMA: ERROR - CAMPOS VACÍOS");
+            return;
+        }
+
+        const { error } = await _supabase
+            .from('items')
+            .insert([{ title: title, url: url, category: category }]);
+
+        if (error) {
+            console.error(error);
+            alert("SISTEMA: ERROR DE INYECCIÓN");
+        } else {
+            alert("INYECCIÓN COMPLETADA CON ÉXITO");
+            location.reload();
+        }
+    }
+
+    // --- CARGAR CONTENIDO ---
+    async function cargar() {
         const { data, error } = await _supabase.from('items').select('*').order('created_at', { ascending: false });
         if (error) return;
-        document.querySelectorAll('.section').forEach(s => s.innerHTML = '');
+
         data.forEach(item => {
             const container = document.getElementById(item.category);
             if (container) {
                 const card = document.createElement('div');
                 card.className = 'card';
-                let vidId = item.url.includes('v=') ? item.url.split('v=')[1].split('&')[0] : item.url.split('/').pop();
-                card.innerHTML = `<iframe src="https://www.youtube.com/embed/${vidId}" allowfullscreen></iframe><h3>${item.title}</h3>`;
+                let vidId = "";
+                if(item.url.includes('v=')) vidId = item.url.split('v=')[1].split('&')[0];
+                else vidId = item.url.split('/').pop();
+                
+                card.innerHTML = `
+                    <iframe src="https://www.youtube.com/embed/${vidId}" allowfullscreen></iframe>
+                    <h3>${item.title}</h3>
+                `;
                 container.appendChild(card);
             }
         });
     }
-    loadLibrary();
+    cargar();
 
     // --- NAVEGACIÓN ---
-    function controlNav(id, btn) {
-        document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+    function verSeccion(id, btn) {
+        document.querySelectorAll('.section, .main-panel').forEach(s => s.style.display = 'none');
         document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        
         const target = document.getElementById(id);
-        if(target) target.style.display = 'grid';
+        if(id === 'admin') target.style.display = 'block';
+        else target.style.display = 'grid';
+        
         btn.classList.add('active');
     }
-
-    // --- MODO ADMIN ---
-    let secretClicks = 0;
-    document.getElementById('secret-trigger').addEventListener('click', () => {
-        secretClicks++;
-        if (secretClicks === 3) {
-            const pass = prompt("ACCESO RESTRINGIDO. PASSWORD:");
-            if (pass === 'K73_SYSTEM') document.getElementById('admin-panel').style.display = 'block';
-            secretClicks = 0;
-        }
-    });
-
-    async function injectData() {
-        const title = document.getElementById('content-title').value;
-        const url = document.getElementById('content-url').value;
-        const category = document.getElementById('content-category').value;
-        await _supabase.from('items').insert([{ title, url, category }]);
-        location.reload();
-    }
 </script>
+</body>
+</html>
