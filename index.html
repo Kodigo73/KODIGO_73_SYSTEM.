@@ -6,12 +6,12 @@
     <title>EL RAP NO SE TOCA | KODIGO 73</title>
     <style>
         :root {
-            --negro-trans: rgba(0, 0, 0, 0.7); /* Transparencia para ver el fondo rojo */
-            --rojo: #ff0000;
             --verde: #00ff41;
-            --verde-glow: rgba(0, 255, 65, 0.3);
+            --rojo: #ff0000;
             --fuente: 'Courier New', Courier, monospace;
         }
+
+        * { box-sizing: border-box; }
 
         body {
             background: #000 url('lucid-origin_textura_valla_metalica_de_mma_roja_y_negra_para_un_fondo-1.jpg') fixed center/cover;
@@ -21,98 +21,121 @@
             overflow-x: hidden;
         }
 
-        /* LÍNEA DE ESCANEO LÁSER */
+        /* LÍNEA LÁSER DINÁMICA */
         .scanline {
-            width: 100%; height: 3px;
+            width: 100%; height: 2px;
             background: var(--verde);
             position: fixed;
-            opacity: 0.3;
+            opacity: 0.5;
             box-shadow: 0 0 15px var(--verde);
-            animation: scan 5s linear infinite;
+            animation: scan 4s linear infinite;
             z-index: 9999;
             pointer-events: none;
         }
         @keyframes scan { 0% { top: -5%; } 100% { top: 105%; } }
 
-        /* CONTENEDOR TRANSPARENTE (ESTILO CRISTAL) */
+        /* CONTENEDOR TOTALMENTE TRANSPARENTE */
         .container {
-            width: 98%;
-            max-width: 1900px;
-            margin: 10px auto;
-            /* Aquí está el truco: fondo semitransparente y desenfoque */
-            background: var(--negro-trans);
-            backdrop-filter: blur(5px); 
-            -webkit-backdrop-filter: blur(5px);
-            
-            border: 2px solid var(--verde);
-            box-shadow: 0 0 40px rgba(0,0,0,0.8);
-            padding: 40px;
-            box-sizing: border-box;
-            min-height: 98vh;
-            position: relative;
-            z-index: 10;
+            width: 100%;
+            min-height: 100vh;
+            background: rgba(0, 0, 0, 0.4); /* Casi invisible para que luzca la valla */
+            backdrop-filter: blur(2px);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        header { text-align: center; margin-bottom: 40px; }
-        
-        /* LOGO MASIVO */
+        header { width: 100%; text-align: center; margin-bottom: 20px; }
+
+        /* LOGO GIGANTE E IMPONENTE */
         .logo-img {
-            width: 450px;
-            filter: drop-shadow(0 0 20px var(--rojo));
+            width: 500px;
+            max-width: 90%;
+            filter: drop-shadow(0 0 15px var(--rojo));
             cursor: pointer;
-            transition: 0.4s;
+            transition: transform 0.3s ease;
         }
+        .logo-img:active { transform: scale(0.95); }
 
         h1 {
             color: var(--verde);
-            font-size: 5rem;
-            text-shadow: 4px 4px var(--rojo);
-            letter-spacing: 12px;
-            margin: 15px 0;
+            font-size: clamp(2.5rem, 10vw, 6rem);
+            text-shadow: 5px 5px 0px #000, 0 0 20px var(--verde);
+            letter-spacing: 15px;
+            margin: 10px 0;
             text-transform: uppercase;
         }
 
-        /* BOTONES TRANSPARENTES */
-        nav { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 30px 0; }
+        /* NAVEGACIÓN ESTILO TERMINAL */
+        nav { 
+            display: flex; 
+            justify-content: center; 
+            gap: 10px; 
+            flex-wrap: wrap; 
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
         nav button {
-            background: rgba(0, 255, 65, 0.1); /* Verde muy suave */
+            background: transparent;
             color: var(--verde);
-            border: 2px solid var(--verde);
-            padding: 20px 45px;
+            border: none;
+            border-bottom: 2px solid transparent;
+            padding: 15px 25px;
             cursor: pointer;
             font-family: var(--fuente);
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            text-transform: uppercase;
             transition: 0.3s;
-            backdrop-filter: blur(10px);
         }
+
         nav button:hover, nav button.active {
-            background: var(--verde);
-            color: black;
-            box-shadow: 0 0 30px var(--verde);
+            color: white;
+            border-bottom: 3px solid var(--verde);
+            text-shadow: 0 0 10px var(--verde);
         }
 
-        /* SECCIONES FLOTANTES */
-        .section { display: none; grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); gap: 35px; }
-        .section.active { display: grid; }
-
-        .card { 
-            background: rgba(0,0,0,0.6); 
-            border: 1px solid rgba(0, 255, 65, 0.3); 
-            border-top: 4px solid var(--rojo); 
+        /* GRID DE CONTENIDO SIN MARCOS */
+        .section {
+            display: none;
+            width: 100%;
+            max-width: 1600px;
+            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+            gap: 40px;
             padding: 20px;
+        }
+
+        .card {
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            border-left: 4px solid var(--rojo);
             transition: 0.3s;
         }
-        .card:hover { border-color: var(--verde); transform: translateY(-5px); }
-        .card iframe { width: 100%; aspect-ratio: 16/9; border: 1px solid var(--verde); }
+        .card:hover { background: rgba(0,0,0,0.9); transform: scale(1.02); }
+        .card iframe { width: 100%; aspect-ratio: 16/9; border: none; }
+        .card h3 { color: var(--verde); text-align: center; font-size: 1.1rem; margin-top: 15px; }
 
-        /* EFECTO SHAKE */
-        .shake { animation: shake 0.3s ease-in-out; }
-        @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-10px);} 75% {transform: translateX(10px);} }
+        /* EFECTO VIBRACIÓN */
+        .shake { animation: shake 0.2s ease-in-out; }
+        @keyframes shake { 0% {transform: translate(0);} 25% {transform: translate(-5px, 5px);} 75% {transform: translate(5px, -5px);} }
 
         /* PANEL ADMIN */
-        #admin-panel { display: none; margin-top: 50px; border: 2px dashed var(--rojo); padding: 30px; background: rgba(0,0,0,0.8); }
+        #admin-panel {
+            display: none;
+            width: 100%;
+            max-width: 800px;
+            background: #000;
+            border: 2px solid var(--rojo);
+            padding: 30px;
+            margin-top: 50px;
+        }
+        input, select, .btn-inyeccion {
+            width: 100%; padding: 15px; margin: 10px 0;
+            background: #111; border: 1px solid var(--verde); color: var(--verde);
+            font-family: var(--fuente); font-size: 1.2rem;
+        }
+        .btn-inyeccion { background: var(--rojo); color: white; border: none; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -121,9 +144,9 @@
 
 <div class="container" id="main-frame">
     <header>
-        <img src="kodigo-73_4_800x450 (1).png" alt="K73_LOGO" class="logo-img" id="secret-trigger">
+        <img src="kodigo-73_4_800x450 (1).png" alt="K73" class="logo-img" id="secret-trigger">
         <h1>EL RAP NO SE TOCA</h1>
-        <p style="color: var(--verde); letter-spacing: 5px; text-shadow: 2px 2px #000;">[ INTERFAZ TÁCTICA // FONDO INTEGRADO ]</p>
+        <p style="color: var(--verde); font-weight: bold;">[ SYSTEMA K73 // MODO DISPONIBLE ]</p>
     </header>
 
     <nav>
@@ -133,22 +156,22 @@
         <button onclick="controlNav('galeria', this)">GALERÍA</button>
     </nav>
 
-    <div id="octogono" class="section active"></div>
+    <div id="octogono" class="section" style="display: grid;"></div>
     <div id="xtreme" class="section"></div>
     <div id="street" class="section"></div>
     <div id="galeria" class="section"></div>
 
     <div id="admin-panel">
-        <h2 style="color: var(--rojo); text-align: center;">INYECTAR DATA</h2>
-        <input type="text" id="content-title" style="width:100%; padding:15px; margin-bottom:10px; background:rgba(0,0,0,0.7); border:1px solid var(--verde); color:var(--verde);" placeholder="TÍTULO">
-        <input type="text" id="content-url" style="width:100%; padding:15px; margin-bottom:10px; background:rgba(0,0,0,0.7); border:1px solid var(--verde); color:var(--verde);" placeholder="URL">
-        <select id="content-category" style="width:100%; padding:15px; margin-bottom:10px; background:rgba(0,0,0,0.7); border:1px solid var(--verde); color:var(--verde);">
+        <h2 style="color: var(--rojo); text-align: center;">INYECTAR NUEVA DATA</h2>
+        <input type="text" id="content-title" placeholder="NOMBRE DEL ARCHIVO">
+        <input type="text" id="content-url" placeholder="URL (YOUTUBE / IMG)">
+        <select id="content-category">
             <option value="octogono">OCTÁGONO</option>
             <option value="xtreme">X-TREME</option>
             <option value="street">STREET</option>
             <option value="galeria">GALERÍA</option>
         </select>
-        <button id="save-btn" style="width:100%; padding:20px; background:var(--rojo); color:white; border:none; font-weight:bold; cursor:pointer;">EJECUTAR</button>
+        <button class="btn-inyeccion" id="save-btn">CONFIRMAR INYECCIÓN</button>
     </div>
 </div>
 
@@ -156,49 +179,37 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 <script src="app.js"></script>
+
 <script>
- <script>
     const snd = document.getElementById('snd-click');
-    const mainFrame = document.getElementById('main-frame');
+    const frame = document.getElementById('main-frame');
 
-    function controlNav(secId, btn) {
-        // 1. Sonido y Temblor
-        if(snd) {
-            snd.currentTime = 0;
-            snd.play().catch(()=>{}); 
-        }
-        
-        mainFrame.classList.remove('shake');
-        void mainFrame.offsetWidth; // Truco para reiniciar animación
-        mainFrame.classList.add('shake');
+    function controlNav(id, btn) {
+        if(snd) { snd.currentTime = 0; snd.play().catch(()=>{}); }
+        frame.classList.remove('shake');
+        void frame.offsetWidth;
+        frame.classList.add('shake');
 
-        // 2. Ocultar TODAS las secciones primero
-        const todasLasSecciones = document.querySelectorAll('.section');
-        todasLasSecciones.forEach(s => {
-            s.style.display = 'none'; // Forzamos el cierre
-            s.classList.remove('active');
-        });
-
-        // 3. Quitar luz a todos los botones
+        document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
         document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-        
-        // 4. Mostrar SOLO la que hemos clicado
-        const seccionActiva = document.getElementById(secId);
-        if (seccionActiva) {
-            seccionActiva.style.display = 'grid'; // Forzamos la apertura en modo rejilla
-            seccionActiva.classList.add('active');
-        }
 
-        // 5. Encender el botón clicado
+        const target = document.getElementById(id);
+        if(target) target.style.display = 'grid';
         btn.classList.add('active');
     }
 
-    // Al cargar la página, nos aseguramos de que la primera esté abierta
-    window.onload = () => {
-        const btnOctogono = document.querySelector('nav button');
-        if(btnOctogono) controlNav('octogono', btnOctogono);
-    };
-</script>
+    let secretClicks = 0;
+    document.getElementById('secret-trigger').addEventListener('click', () => {
+        secretClicks++;
+        if (secretClicks === 3) {
+            const pass = prompt("ACCESO RESTRINGIDO. PASSWORD:");
+            if (pass === 'K73_SYSTEM') {
+                document.getElementById('admin-panel').style.display = 'block';
+                window.scrollTo(0, document.body.scrollHeight);
+            }
+            secretClicks = 0;
+        }
+    });
 </script>
 </body>
 </html>
